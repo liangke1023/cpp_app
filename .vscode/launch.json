@@ -1,0 +1,18 @@
+{"version": "0.2.0",
+    "configurations": [
+        {
+            "name": "clang - Générer et déboguer le fichier actif",
+            "type": "cppdbg",
+            "request": "launch",
+            "targetArchitecture": "arm64",
+            "program": "${fileDirname}/hello",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "lldb",
+            "preLaunchTask": "C/C++: clang générer le fichier actif"
+        }
+    ]
+}
