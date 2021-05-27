@@ -1,8 +1,8 @@
 #include <iostream>
-#include "leetcode.hpp"
+
 using namespace std;
 
-int main()
-{
-    solution();
+int main(int argc, char **argv) {
+  int a = 0;
+  return 0;
 }
