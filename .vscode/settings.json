@@ -1,4 +1,7 @@
 {
-    "cmake.configureOnOpen": true,
-    "clang-format.fallbackStyle": "Google"
+    "files.associations": {
+        "iosfwd": "cpp",
+        "vector": "cpp",
+        "list": "cpp"
+    }
 }
