@@ -1,4 +1,5 @@
-
+#ifndef GRAPH
+#define GRAPH
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
@@ -39,6 +40,7 @@ Graph::Graph(int size, float density) : size(size), density(density) {
   for (int i = 0; i < size; i++) {
     graph[i] = new bool[size];
     values_edge[i] = new int[size];
+    values_node[i] = -1;  // init value
   }
   for (int i = 0; i < size; i++) {
     for (int j = i; j < size; j++) {
@@ -58,9 +60,9 @@ Graph ::~Graph() {
     delete (graph[i]);
     delete (values_edge[i]);
   }
-  delete (graph);
-  delete (values_edge);
-  delete (values_node);
+  if (graph != nullptr) delete (graph);
+  if (values_edge != nullptr) delete (values_edge);
+  if (values_node != nullptr) delete (values_node);
 }
 bool Graph::Adjacent(int x, int y) {
   if (x < 0 || x >= size || y < 0 || y >= size) {
@@ -69,6 +71,12 @@ bool Graph::Adjacent(int x, int y) {
   }
   return graph[x][y];
 }
+/**
+ * @brief lists all nodes y such that there is an edge from x to v
+ *
+ * @param x
+ * @return vector<int>
+ */
 vector<int> Graph::Neighbors(int x) {
   vector<int> neighbors;
   for (int i = 0; i < size; i++) {
@@ -107,3 +115,5 @@ int Graph::get_edge_value(int x, int y) {
 void Graph::set_edge_value(int x, int y, int v) {
   if (x < size && y < size) values_edge[x][y] = values_edge[y][x] = v;
 }
+
+#endif /* GRAPH */
