@@ -13,7 +13,7 @@ class Graph {
   float density;
   int size;
   int edge_count;
-  int *values_node;
+  vector<pair<int, int> > values_node;  // distance and last vertex
 
  public:
   Graph(int size = 50, float density = 0.3);
@@ -25,8 +25,8 @@ class Graph {
   vector<int> Neighbors(int x);
   void Add(int x, int y);
   void Delete(int x, int y);
-  int get_node_value(int x);
-  void set_node_value(int x, int a);
+  pair<int, int> get_node_value(int x);
+  void set_node_value(int x, pair<int, int> a);
   int get_edge_value(int x, int y);
   void set_edge_value(int x, int y, int v);
 };
@@ -36,11 +36,10 @@ Graph::Graph(int size, float density) : size(size), density(density) {
   edge_count = 0;
   graph = new bool *[size];
   values_edge = new int *[size];
-  values_node = new int[size];
+  values_node.resize(size);
   for (int i = 0; i < size; i++) {
     graph[i] = new bool[size];
     values_edge[i] = new int[size];
-    values_node[i] = -1;  // init value
   }
   for (int i = 0; i < size; i++) {
     for (int j = i; j < size; j++) {
@@ -49,7 +48,7 @@ Graph::Graph(int size, float density) : size(size), density(density) {
       } else {
         graph[i][j] = graph[j][i] =
             static_cast<double>(rand()) / RAND_MAX < density;
-        values_edge[i][j] = values_edge[j][i] = rand();
+        values_edge[i][j] = values_edge[j][i] = rand() % 10;
         if (graph[i][j]) edge_count++;
       }
     }
@@ -62,7 +61,6 @@ Graph ::~Graph() {
   }
   if (graph != nullptr) delete (graph);
   if (values_edge != nullptr) delete (values_edge);
-  if (values_node != nullptr) delete (values_node);
 }
 bool Graph::Adjacent(int x, int y) {
   if (x < 0 || x >= size || y < 0 || y >= size) {
@@ -100,11 +98,11 @@ void Graph::Delete(int x, int y) {
   graph[x][y] = graph[y][x] = false;
   return;
 }
-int Graph::get_node_value(int x) {
+pair<int, int> Graph::get_node_value(int x) {
   if (x < size) return values_node[x];
-  return -1;
+  return make_pair(-1, -1);
 }
-void Graph::set_node_value(int x, int a) {
+void Graph::set_node_value(int x, pair<int, int> a) {
   if (x < size) values_node[x] = a;
   return;
 }

@@ -5,15 +5,15 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-  ShortestPath spath(30, 0.6);
-  list<int> l;
-  l.push_back(1);
-  l.push_back(3);
-  l.push_back(5);
-  l.pop_front();
-  l.insert(l.begin(), 10);
-  for (auto i = l.begin(); i != l.end(); i++) {
-    cout << *i << " " << endl;
+  ShortestPath shortest_path(6, 0.7);
+  shortest_path.vertices();
+  list<int> paths = shortest_path.path(2, 4);
+  while (paths.size()) {
+    cout << paths.front() << " - ";
+    paths.pop_front();
   }
+  cout << endl;
+  cout << " path size = " << shortest_path.path_size(2, 4) << endl;
+
   return 0;
 }
