@@ -52,6 +52,7 @@ list<int> ShortestPath::path(int s, int t) {
     vector<int> neighbors = g.Neighbors(current);
     for (int i = 0; i < neighbors.size(); i++) {
       if (g.get_node_value(neighbors.at(i)).first < 0) {
+        // while the shortest path for this vertex not found yet
         int edge = g.get_edge_value(current, neighbors.at(i)) +
                    g.get_node_value(current).first;
         pqueue.insert(make_pair(neighbors.at(i), make_pair(edge, current)));

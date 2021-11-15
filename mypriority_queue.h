@@ -59,14 +59,16 @@ void MyPriorityQueue::insert(pair<int, pair<int, int> > element) {
       if (element.second.first < itr->second.first) {
         queue.insert(itr, element);
         _size++;
+        return;
       }
     } else {
       if (element.second.first > itr->second.first) {
         queue.insert(itr, element);
         _size++;
+        return;
       }
     }
-    return;
+    itr++;
   }
   // current element is largest/smallest
   queue.push_back(element);

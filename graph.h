@@ -48,7 +48,7 @@ Graph::Graph(int size, float density) : size(size), density(density) {
       } else {
         graph[i][j] = graph[j][i] =
             static_cast<double>(rand()) / RAND_MAX < density;
-        values_edge[i][j] = values_edge[j][i] = rand() % 10;
+        values_edge[i][j] = values_edge[j][i] = rand() % 10 + 1;
         if (graph[i][j]) edge_count++;
       }
     }
@@ -90,6 +90,12 @@ void Graph::Add(int x, int y) {
   graph[x][y] = graph[y][x] = true;
   return;
 }
+/**
+ * @brief delete egde between x and y
+ *
+ * @param x
+ * @param y
+ */
 void Graph::Delete(int x, int y) {
   if (x < 0 || x >= size || y < 0 || y >= size) {
     cout << "Indices out of range!" << endl;

@@ -5,11 +5,13 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-  ShortestPath shortest_path(6, 0.7);
+  ShortestPath shortest_path(9, 0.33);
   shortest_path.vertices();
   list<int> paths = shortest_path.path(2, 4);
+  cout << paths.front();
+  paths.pop_front();
   while (paths.size()) {
-    cout << paths.front() << " - ";
+    cout << " - " << paths.front();
     paths.pop_front();
   }
   cout << endl;
