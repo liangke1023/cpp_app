@@ -5,17 +5,23 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-  ShortestPath shortest_path(9, 0.33);
-  shortest_path.vertices();
-  list<int> paths = shortest_path.path(2, 4);
-  cout << paths.front();
-  paths.pop_front();
-  while (paths.size()) {
-    cout << " - " << paths.front();
-    paths.pop_front();
+  double densities[2] = {0.2, 0.4};
+  const int size = 50;
+  for (auto d : densities) {
+    ShortestPath shortest_path(size, d, 1, 10);
+    // shortest_path.vertices();
+    int sum_shortest = 0;
+    int paths_exist = 0;
+    for (int i = 1; i < size; i++) {
+      int path_size = shortest_path.path_size(0, i);
+      if (path_size > 0) {
+        sum_shortest += path_size;
+        paths_exist++;
+      }
+    }
+    cout << "average of shortest paths: "
+         << static_cast<double>(sum_shortest) / paths_exist << endl;
   }
-  cout << endl;
-  cout << " path size = " << shortest_path.path_size(2, 4) << endl;
 
   return 0;
 }

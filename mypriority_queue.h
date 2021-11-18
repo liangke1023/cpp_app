@@ -5,7 +5,7 @@ using namespace std;
 class MyPriorityQueue {
   list<pair<int, pair<int, int> > > queue;
   bool increasing;  // true if priority is increasing
-  int _size = 0;    //
+  int size = 0;     //
  public:
   MyPriorityQueue(){};
   ~MyPriorityQueue(){};
@@ -15,7 +15,7 @@ class MyPriorityQueue {
   void insert(
       pair<int, pair<int, int> > element);  // vertex, distance, last vertex
   pair<int, pair<int, int> > top();
-  int size();
+  int Size();
 };
 void MyPriorityQueue::chgPriority(bool priority) {
   if (this->increasing != priority && queue.size() > 0) {
@@ -26,7 +26,7 @@ void MyPriorityQueue::chgPriority(bool priority) {
 }
 void MyPriorityQueue::minPriority() {
   if (queue.size() > 0) queue.pop_front();
-  _size--;
+  size--;
   return;
 }
 bool MyPriorityQueue::contains(int v) {
@@ -58,13 +58,13 @@ void MyPriorityQueue::insert(pair<int, pair<int, int> > element) {
     if (increasing) {
       if (element.second.first < itr->second.first) {
         queue.insert(itr, element);
-        _size++;
+        size++;
         return;
       }
     } else {
       if (element.second.first > itr->second.first) {
         queue.insert(itr, element);
-        _size++;
+        size++;
         return;
       }
     }
@@ -72,10 +72,10 @@ void MyPriorityQueue::insert(pair<int, pair<int, int> > element) {
   }
   // current element is largest/smallest
   queue.push_back(element);
-  _size++;
+  size++;
   return;
 }
 
 pair<int, pair<int, int> > MyPriorityQueue::top() { return queue.front(); }
 
-int MyPriorityQueue::size() { return _size; }
+int MyPriorityQueue::Size() { return this->size; }

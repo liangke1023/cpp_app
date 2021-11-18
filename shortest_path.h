@@ -15,7 +15,8 @@ class ShortestPath {
   MyPriorityQueue pqueue;
 
  public:
-  ShortestPath(int v, float density) : g(v, density) {
+  ShortestPath(int v, float density, int min_edge, int max_edge)
+      : g(v, density, min_edge, max_edge) {
     pqueue.chgPriority(true);
   };
   ShortestPath(){};
@@ -58,8 +59,8 @@ list<int> ShortestPath::path(int s, int t) {
         pqueue.insert(make_pair(neighbors.at(i), make_pair(edge, current)));
       }
     }
-    if (pqueue.size() == 0) {
-      cout << "Can not find path from " << s << " to " << t << endl;
+    if (pqueue.Size() == 0) {
+      // cout << "Can not find path from " << s << " to " << t << endl;
       return paths;
     }
     current = pqueue.top().first;
@@ -79,6 +80,9 @@ list<int> ShortestPath::path(int s, int t) {
 
 int ShortestPath::path_size(int s, int t) {
   list<int> paths = this->path(s, t);
+  if (paths.back() != t) {
+    return -1;
+  }
   return g.get_node_value(paths.back()).first;
 }
 

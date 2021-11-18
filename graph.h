@@ -16,7 +16,8 @@ class Graph {
   vector<pair<int, int> > values_node;  // distance and last vertex
 
  public:
-  Graph(int size = 50, float density = 0.3);
+  Graph(int size = 50, float density = 0.3, int min_edge = 1,
+        int max_edge = 10);
   ~Graph();
 
   int V() { return size; }
@@ -30,7 +31,8 @@ class Graph {
   int get_edge_value(int x, int y);
   void set_edge_value(int x, int y, int v);
 };
-Graph::Graph(int size, float density) : size(size), density(density) {
+Graph::Graph(int size, float density, int min_edge, int max_edge)
+    : size(size), density(density) {
   // create a random graph
   srand(time(NULL));
   edge_count = 0;
@@ -48,7 +50,8 @@ Graph::Graph(int size, float density) : size(size), density(density) {
       } else {
         graph[i][j] = graph[j][i] =
             static_cast<double>(rand()) / RAND_MAX < density;
-        values_edge[i][j] = values_edge[j][i] = rand() % 10 + 1;
+        values_edge[i][j] = values_edge[j][i] =
+            rand() % (max_edge - min_edge) + min_edge;
         if (graph[i][j]) edge_count++;
       }
     }
