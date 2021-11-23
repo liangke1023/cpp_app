@@ -7,12 +7,11 @@ struct NodeInfo {
   int path_size;
   int last_node;
 };
-bool compare_element(pair<int, pair<int, int> > a,
-                     pair<int, pair<int, int> > b) {
-  return a.second.first < b.second.first;
+bool compare_element(NodeInfo& a, NodeInfo& b) {
+  return a.path_size < b.path_size;
 }
 class MyPriorityQueue {
-  list<pair<int, pair<int, int> > > queue;
+  list<NodeInfo> queue;
   bool increasing;  // true if priority is increasing
  public:
   MyPriorityQueue(){};
@@ -20,9 +19,8 @@ class MyPriorityQueue {
   void chgPriority(bool priority);
   void minPriority();
   bool contains(int v);
-  void insert(
-      pair<int, pair<int, int> > element);  // vertex, distance, last vertex
-  pair<int, pair<int, int> > top();
+  void insert(NodeInfo element);  // vertex, distance, last vertex
+  NodeInfo top();
   int Size();
 };
 void MyPriorityQueue::chgPriority(bool priority) {
@@ -33,12 +31,13 @@ void MyPriorityQueue::chgPriority(bool priority) {
   return;
 }
 void MyPriorityQueue::minPriority() {
+  cout << "priority queue: " << queue.size() << endl;
   if (queue.size() > 0) queue.pop_front();
   return;
 }
 bool MyPriorityQueue::contains(int v) {
   for (auto& i : queue)
-    if (i.first == v) return true;
+    if (i.index == v) return true;
   return false;
 }
 /**
@@ -46,40 +45,39 @@ bool MyPriorityQueue::contains(int v) {
  *
  * @param element
  */
-void MyPriorityQueue::insert(pair<int, pair<int, int> > element) {
-  if (contains(element.first)) {
-    for (auto& i : queue) {
-      if (element.first == i.first) {
-        if (increasing)
-          i.second =
-              element.second.first < i.second.first ? element.second : i.second;
-        else
-          i.second =
-              element.second.first > i.second.first ? element.second : i.second;
-        return;
+void MyPriorityQueue::insert(NodeInfo element) {
+  for (auto& i : queue) {
+    if (element.index == i.index) {
+      if ((increasing && element.path_size < i.path_size) ||
+          (!increasing && element.path_size > i.path_size)) {
+        i.path_size = element.path_size;
+        i.last_node = element.last_node;
       }
+      return;
     }
   }
-  auto itr = queue.begin();
-  while (itr != queue.end()) {
-    if (increasing) {
-      if (element.second.first < itr->second.first) {
-        queue.insert(itr, element);
-        return;
-      }
-    } else {
-      if (element.second.first > itr->second.first) {
-        queue.insert(itr, element);
-        return;
-      }
+  auto i = queue.begin();
+  while (i != queue.end()) {
+    if ((increasing && element.path_size < i->path_size) ||
+        (!increasing && element.path_size > i->path_size)) {
+      queue.insert(i, element);
+      return;
     }
-    itr++;
+    i++;
   }
+
   // current element is largest/smallest
   queue.push_back(element);
   return;
 }
 
-pair<int, pair<int, int> > MyPriorityQueue::top() { return queue.front(); }
+NodeInfo MyPriorityQueue::top() {
+  cout << "queue:" << endl;
+  for (auto& i : queue) {
+    cout << i.index << " " << i.path_size << " " << i.last_node << endl;
+  }
+  cout << endl;
+  return queue.front();
+}
 
 int MyPriorityQueue::Size() { return this->queue.size(); }

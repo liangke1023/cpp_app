@@ -29,50 +29,63 @@ class ShortestPath {
 void ShortestPath::vertices() {
   // show vertices and edges
   int num_vertices = g.V();
+  for (int i = 0; i < num_vertices; i++) cout << "  " << i;
+  cout << endl;
   for (int v = 0; v < num_vertices; v++) {
-    for (int i = v + 1; i < num_vertices; i++) {
+    cout << v;
+    for (int i = 0; i < num_vertices; i++) {
       if (g.Adjacent(v, i))
-        cout << "Edge between vertex " << v << " and " << i << " has length "
-             << g.get_edge_value(v, i) << endl;
+        cout << "  " << g.get_edge_value(v, i);
+      else
+        cout << "  " << 0;
     }
+    cout << endl;
   }
   return;
 }
 
-list<int> ShortestPath::path(int s, int t) {
+list<int> ShortestPath::path(int start, int terminal) {
   list<int> paths;
-  int current = s;
+  int current = start;
   // reset all node values
   for (int i = 0; i < g.V(); i++) {
     g.set_node_value(i, make_pair(-1, -1));
   }
-
+  cout << "find " << terminal << endl;
   // first vertice is zero
-  g.set_node_value(s, make_pair(0, -1));
-  while (current != t) {
+  g.set_node_value(start, make_pair(0, -1));
+  while (current != terminal) {
+    cout << "current: " << current << " ";
     vector<int> neighbors = g.Neighbors(current);
-    for (int i = 0; i < neighbors.size(); i++) {
-      if (g.get_node_value(neighbors.at(i)).first < 0) {
+    for (auto &vertex : neighbors) {
+      if (g.get_node_value(vertex).first < 0) {
         // while the shortest path for this vertex not found yet
-        int edge = g.get_edge_value(current, neighbors.at(i)) +
-                   g.get_node_value(current).first;
-        pqueue.insert(make_pair(neighbors.at(i), make_pair(edge, current)));
+        NodeInfo node_info;
+        node_info.index = vertex;
+        node_info.last_node = current;
+        node_info.path_size =
+            g.get_edge_value(current, vertex) + g.get_node_value(current).first;
+        pqueue.insert(node_info);
       }
     }
     if (pqueue.Size() == 0) {
       // cout << "Can not find path from " << s << " to " << t << endl;
+      cout << endl;
       return paths;
     }
-    current = pqueue.top().first;
-    g.set_node_value(pqueue.top().first, pqueue.top().second);
+    NodeInfo top_node_info = pqueue.top();
+    current = top_node_info.index;
+    g.set_node_value(top_node_info.index, make_pair(top_node_info.path_size,
+                                                    top_node_info.path_size));
     pqueue.minPriority();
   }
-  if (current == t) {
-    while (current != s) {
+  if (current == terminal) {
+    while (current != start) {
       paths.push_front(current);
       current = g.get_node_value(current).second;
     }
-    paths.push_front(s);
+    paths.push_front(start);
+    cout << "\n" << endl;
     return paths;
   }
   return paths;

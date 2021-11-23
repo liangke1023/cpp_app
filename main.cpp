@@ -9,7 +9,7 @@ int main(int argc, char** argv) {
   const int size = 50;
   for (auto d : densities) {
     ShortestPath shortest_path(size, d, 1, 10);
-    // shortest_path.vertices();
+    shortest_path.vertices();
     int sum_shortest = 0;
     int paths_exist = 0;
     for (int i = 1; i < size; i++) {
