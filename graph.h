@@ -58,7 +58,7 @@ Graph::Graph(int size, float density, int min_edge, int max_edge)
   }
 }
 Graph ::~Graph() {
-  for (int i; i < size; i++) {
+  for (int i=0; i < size; i++) {
     delete (graph[i]);
     delete (values_edge[i]);
   }
@@ -67,7 +67,7 @@ Graph ::~Graph() {
 }
 bool Graph::Adjacent(int x, int y) {
   if (x < 0 || x >= size || y < 0 || y >= size) {
-    cout << "Indices out of range!" << endl;
+    // cout << "Indices out of range!" << endl;
     return false;
   }
   return graph[x][y];

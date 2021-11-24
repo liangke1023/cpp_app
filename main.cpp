@@ -5,7 +5,7 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-  double densities[2] = {0.2, 0.4};
+  float densities[2] = {0.2f, 0.4f};
   const int size = 50;
   for (auto d : densities) {
     ShortestPath shortest_path(size, d, 1, 10);

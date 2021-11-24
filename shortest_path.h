@@ -17,7 +17,6 @@ class ShortestPath {
  public:
   ShortestPath(int v, float density, int min_edge, int max_edge)
       : g(v, density, min_edge, max_edge) {
-    pqueue.chgPriority(true);
   };
   ShortestPath(){};
   ~ShortestPath(){};
@@ -51,12 +50,14 @@ list<int> ShortestPath::path(int start, int terminal) {
   for (int i = 0; i < g.V(); i++) {
     g.set_node_value(i, make_pair(-1, -1));
   }
-  cout << "find " << terminal << endl;
+  pqueue.reset();
+  //cout << "find " << terminal << endl;
   // first vertice is zero
-  g.set_node_value(start, make_pair(0, -1));
+  g.set_node_value(start, make_pair(0, 0));
   while (current != terminal) {
-    cout << "current: " << current << " ";
+    //cout << "current: " << current << " ";
     vector<int> neighbors = g.Neighbors(current);
+    //cout<< "neighbors size: "<< neighbors.size()<< endl;
     for (auto &vertex : neighbors) {
       if (g.get_node_value(vertex).first < 0) {
         // while the shortest path for this vertex not found yet
@@ -70,13 +71,13 @@ list<int> ShortestPath::path(int start, int terminal) {
     }
     if (pqueue.Size() == 0) {
       // cout << "Can not find path from " << s << " to " << t << endl;
-      cout << endl;
+      //cout << endl;
       return paths;
     }
     NodeInfo top_node_info = pqueue.top();
     current = top_node_info.index;
     g.set_node_value(top_node_info.index, make_pair(top_node_info.path_size,
-                                                    top_node_info.path_size));
+                                                    top_node_info.last_node));
     pqueue.minPriority();
   }
   if (current == terminal) {
@@ -85,7 +86,7 @@ list<int> ShortestPath::path(int start, int terminal) {
       current = g.get_node_value(current).second;
     }
     paths.push_front(start);
-    cout << "\n" << endl;
+    //cout << "\n" << endl;
     return paths;
   }
   return paths;
@@ -93,6 +94,7 @@ list<int> ShortestPath::path(int start, int terminal) {
 
 int ShortestPath::path_size(int s, int t) {
   list<int> paths = this->path(s, t);
+  if (paths.size()==0) return -1;
   if (paths.back() != t) {
     return -1;
   }
