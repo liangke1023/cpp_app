@@ -18,6 +18,7 @@ class Graph {
  public:
   Graph(int size = 50, float density = 0.3, int min_edge = 1,
         int max_edge = 10);
+  Graph(vector<int> &input);
   ~Graph();
 
   int V() { return size; }
@@ -30,6 +31,7 @@ class Graph {
   void set_node_value(int x, pair<int, int> a);
   int get_edge_value(int x, int y);
   void set_edge_value(int x, int y, int v);
+  void ShowGraph();
 };
 Graph::Graph(int size, float density, int min_edge, int max_edge)
     : size(size), density(density) {
@@ -57,14 +59,47 @@ Graph::Graph(int size, float density, int min_edge, int max_edge)
     }
   }
 }
+Graph::Graph(vector<int> &input) {
+  auto it = input.begin();
+  size = *it++;
+  graph = new bool *[size];
+  values_edge = new int *[size];
+  values_node.resize(size);
+  for (int i = 0; i < size; i++) {
+    graph[i] = new bool[size];
+    values_edge[i] = new int[size];
+  }
+
+  for (int i = 0; i < size; i++) {
+    for (int j = i; j < size; j++) {
+      graph[i][j] = false;
+    }
+  }
+  while (it != input.end()) {
+    int node0 = *it++;
+    int node1 = *it++;
+    int egde = *it++;
+    this->Add(node0, node1);
+    this->set_edge_value(node0, node1, egde);
+  }
+}
+
 Graph ::~Graph() {
-  for (int i=0; i < size; i++) {
+  for (int i = 0; i < size; i++) {
     delete (graph[i]);
     delete (values_edge[i]);
   }
   if (graph != nullptr) delete (graph);
   if (values_edge != nullptr) delete (values_edge);
 }
+/**
+ * @brief check if path between x and y
+ *
+ * @param x
+ * @param y
+ * @return true
+ * @return false
+ */
 bool Graph::Adjacent(int x, int y) {
   if (x < 0 || x >= size || y < 0 || y >= size) {
     // cout << "Indices out of range!" << endl;
@@ -85,6 +120,12 @@ vector<int> Graph::Neighbors(int x) {
   }
   return neighbors;
 }
+/**
+ * @brief add path between x and y
+ *
+ * @param x
+ * @param y
+ */
 void Graph::Add(int x, int y) {
   if (x < 0 || x >= size || y < 0 || y >= size) {
     cout << "Indices out of range!" << endl;
@@ -122,5 +163,17 @@ int Graph::get_edge_value(int x, int y) {
 void Graph::set_edge_value(int x, int y, int v) {
   if (x < size && y < size) values_edge[x][y] = values_edge[y][x] = v;
 }
-
+void Graph::ShowGraph() {
+  for (int i = 0; i < size; i++) {
+    cout << i << " ";
+    for (int j = 0; j < size; j++) {
+      if (Adjacent(i, j))
+        cout << get_edge_value(i, j) << " ";
+      else
+        cout << 0 << " ";
+    }
+    cout << endl;
+  }
+  return;
+}
 #endif /* GRAPH */
