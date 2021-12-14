@@ -35,6 +35,7 @@ JarnikPrimMST::JarnikPrimMST(Graph &graph, int start) {
         edge.vertex0 = current;
         edge.vertex1 = i;
         edge.length = graph.get_edge_value(current, i);
+        // insert and sort
         edge_set.Insert(edge);
       }
     }
@@ -42,10 +43,14 @@ JarnikPrimMST::JarnikPrimMST(Graph &graph, int start) {
     if (edge_set.Size() == 0) break;
     Edge new_edge;
     do {
-      // check if the shortest edge is already in close set
+      // check if the shortest edge is already in close set, edges will be
+      // selected
       new_edge = edge_set.Pop();
+      // vertex 0 is already in close set, continue if both vertices in close
+      // set, this edge will be deleted
       current = new_edge.vertex1;
       if (find(vertices.begin(), vertices.end(), current) == vertices.end()) {
+        // current is a new vertex
         vertices.push_back(current);
         edges.push_back(new_edge.length);
         break;
